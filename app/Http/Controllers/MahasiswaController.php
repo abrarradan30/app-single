@@ -63,7 +63,13 @@ class MahasiswaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $mahasiswa = Mahasiswa::find($id);
+        if($mahasiswa) {
+            return Inertia::render('Mahasiswa/FormEdit', [
+                'id' => $id,
+                'mhs'   =>  $mahasiswa
+            ]);
+        }
     }
 
     /**
@@ -79,7 +85,25 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validateData = $request->validate([
+            'tnama' =>  'required',
+            'tjenkel'   =>  'required',
+            'talamat'   =>  'required'
+        ], [], [
+            'tnama' =>  'Nama Lengkap',
+            'tjenkel'   =>  'Jenis Kelamin',
+            'talamat'   =>  'Alamat'
+        ]);
+
+        $mahasiswa = Mahasiswa::find($id);
+
+        $mahasiswa->nama_lengkap = $validateData['tnama'];
+        $mahasiswa->jenkel = $validateData['tjenkel'];
+        $mahasiswa->alamat = $validateData['talamat'];
+        $mahasiswa->save();
+
+        return redirect()->route('mahasiswa.index')->with('message', 'Data mahasiswa dengan NIM : '
+            . $mahasiswa->nim . ' berhasil diupdate');
     }
 
     /**
@@ -87,6 +111,11 @@ class MahasiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        $nim = $mahasiswa->nim;
+        $mahasiswa->delete();
+
+        return redirect()->route('mahasiswa.index')
+            ->with('message', 'Data dengan NIM : ' . $nim . ' berhasil dihapus');
     }
 }

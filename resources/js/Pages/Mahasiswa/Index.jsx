@@ -1,10 +1,22 @@
 import React from 'react';
 import { Link } from '@inertiajs/inertia-react';
 import { usePage } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function Index({mahasiswa}) {
     // console.log(mahasiswa);
     const {flash} = usePage().props;
+
+    const deleteData = (id, nama) => {
+        if(confirm(`Yakin menghapus data mahasiswa dengan nama ${nama} dihapus ?`)) {
+            Inertia.delete(`/mahasiswa/${id}`);
+        }
+    }
+
+    const editData = (id) => {
+        Inertia.get(`/mahasiswa/${id}`);
+    }
+    
     return (
         <div>
             <h3>Data Mahasiswa</h3>
@@ -31,6 +43,7 @@ export default function Index({mahasiswa}) {
                         <th>Nama Lengkap</th>
                         <th>Jenis Kelamin</th>
                         <th>Alamat</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +61,16 @@ export default function Index({mahasiswa}) {
                                     {mhs.jenkel == 'L' ? 'Laki-Laki' : 'Perempuan'}
                                 </td>
                                 <td>{mhs.alamat}</td>
+                                <td>
+                                    <button
+                                        onClick={() => editData(mhs.id)}
+                                    >Edit</button>
+                                    <button style={{
+                                        marginLeft: 5
+                                    }}
+                                        onClick={() => deleteData(mhs.id, mhs.nama_lengkap)}
+                                    >Hapus</button>
+                                </td>
                             </tr>
                         )) 
                         )

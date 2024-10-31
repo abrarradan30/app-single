@@ -3,11 +3,11 @@ import { Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/inertia-react';
 
-export default function FormTambah() {
-    const [tnim, setTnim] = useState('');
-    const [tnama, setTnama] = useState('');
-    const [tjenkel, setTjenkel] = useState('');
-    const [talamat, setTalamat] = useState('');
+export default function FormEdit({id, mhs}) {
+    const [tnim, setTnim] = useState(mhs.nim);
+    const [tnama, setTnama] = useState(mhs.nama_lengkap);
+    const [tjenkel, setTjenkel] = useState(mhs.jenkel);
+    const [talamat, setTalamat] = useState(mhs.alamat);
 
     const [loading, setLoading] = useState(false)
 
@@ -17,15 +17,15 @@ export default function FormTambah() {
         e.preventDefault()
         setLoading(true);
 
-        const mahasiswa = {tnim, tnama, tjenkel, talamat}
-        Inertia.post('/mahasiswa', mahasiswa, {
+        const mahasiswa = {tnama, tjenkel, talamat}
+        Inertia.put(`/mahasiswa/${id}`, mahasiswa, {
             onFinish: () => setLoading(false)
         })
     }
 
     return (
         <>
-        <h1>Form Tambah Mahasiswa</h1>
+        <h1>Form Edit Mahasiswa</h1>
         <hr/>
         <Link as='button' type='button' href='/mahasiswa' style={{ color:'black', marginBottom:10}}>
             Kembali
@@ -36,10 +36,7 @@ export default function FormTambah() {
                 <td>Input Nim : </td>
                 <td>
                     <input maxLength={7} type="text" value={tnim} onChange={(e) =>  setTnim(e.target.value)} 
-                    placeholder='Inputkan NIM Mahasiswa...'/>
-                    {
-                        errors.tnim && <div style={{ color: 'red', fontStyle:'italic' }}>{errors.tnim}</div>
-                    }
+                    disabled={true}/>
                 </td>
             </tr>
             <tr>
@@ -57,8 +54,8 @@ export default function FormTambah() {
                 <td>
                     <select onChange={(e) => setTjenkel(e.target.value)}>
                         <option value="" selected={true}>--Pilih--</option>
-                        <option value="L">Laki-Laki</option>
-                        <option value="P">Perempuan</option>
+                        <option value="L" selected={tjenkel == 'L' && true}>Laki-Laki</option>
+                        <option value="P" selected={tjenkel == 'P' && true}>Perempuan</option>
                     </select>
                     {
                         errors.tjenkel && <div style={{ color: 'red', fontStyle:'italic' }}>{errors.tjenkel}</div>
@@ -79,7 +76,7 @@ export default function FormTambah() {
                 <td></td>
                 <td>
                     <button type='submit'disabled={loading}>
-                        {loading ? 'Tunggu...' : 'Simpan Data'}
+                        {loading ? 'Tunggu...' : 'Update Data'}
                     </button>
                 </td>
             </tr>
