@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from '@inertiajs/inertia-react';
 import { usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Index({mahasiswa, filters}) {
     // console.log(mahasiswa);
@@ -27,10 +28,10 @@ export default function Index({mahasiswa, filters}) {
     const startNumber = (mahasiswa.current_page - 1) * mahasiswa.per_page;
 
     return (
-        <div>
+        <div className='container container-fluid'>
             <h3>Data Mahasiswa</h3>
             <hr />
-            <Link as='button' type='button' href='/mahasiswa/add' style={{ color:'black', marginBottom:10}}>
+            <Link className='btn btn-sm btn-primary' as='button' type='button' href='/mahasiswa/add' style={{marginBottom:10}}>
             Tambah Data
             </Link>
 
@@ -43,12 +44,13 @@ export default function Index({mahasiswa, filters}) {
             }
 
             <form onSubmit={doSearchData}>
-                <input type='text' value={search} onChange={(e) => setSearch(e.target.value)}/>
-                <button type='submit'>Cari</button>
+                <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Cari berdasarkan NIM/Nama" value={search} onChange={(e) => setSearch(e.target.value)}
+                    aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                <button class="btn btn-outline-success" type="submit">Cari</button>
+                </div>
             </form>
-            <table cellPadding={5} border={1} style={{
-                borderCollapse: 'collapse'
-            }}>
+            <table className='table -table-bordered table-striped table-sm'>
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -75,10 +77,10 @@ export default function Index({mahasiswa, filters}) {
                                 </td>
                                 <td>{mhs.alamat}</td>
                                 <td>
-                                    <button
+                                    <button className='btn btn-sm btn-info'
                                         onClick={() => editData(mhs.id)}
                                     >Edit</button>
-                                    <button style={{
+                                    <button className='btn btn-sm btn-danger' style={{
                                         marginLeft: 5
                                     }}
                                         onClick={() => deleteData(mhs.id, mhs.nama_lengkap)}
@@ -90,8 +92,28 @@ export default function Index({mahasiswa, filters}) {
                     }
                 </tbody>
             </table>
-            <div style={{ marginTop: 10}}>
-                {mahasiswa.links.map((link, index) => {
+            <div style={{ marginTop: 5}}>
+                <ul class="pagination">
+                    {mahasiswa.links.map((link, index) => {
+
+                        if(link.url === null) {
+                            return null;
+                        }
+
+                        let isActive = link.active;
+                        let className = isActive ? "page-item active" : "page-item";
+                        let linkLabel = link.label.replace(/&laquo;/, '<<').replace(/&raquo;/, '>>');
+
+                    return (
+                        <li className={className} key={index}>
+                            <button className='page-link' onClick={() => Inertia.get(link.url)}>
+                                {linkLabel}
+                            </button>
+                        </li>
+                    )
+                    })}
+                </ul>
+                {/* {mahasiswa.links.map((link, index) => {
 
                     let isActive = link.active;
                     const linkActive = isActive ? {fontWeight:'bold', textDecoration:'underline'} : {};
@@ -110,7 +132,7 @@ export default function Index({mahasiswa, filters}) {
                             {linkLabel}
                         </button>
                     )
-                })}
+                })} */}
             </div>
         </div>
     )
