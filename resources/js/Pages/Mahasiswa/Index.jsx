@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from '@inertiajs/inertia-react';
 import { usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({mahasiswa}) {
+export default function Index({mahasiswa, filters}) {
     // console.log(mahasiswa);
     const {flash} = usePage().props;
+
+    const [search, setSearch] = useState(filters.search || '');
 
     const deleteData = (id, nama) => {
         if(confirm(`Yakin menghapus data mahasiswa dengan nama ${nama} dihapus ?`)) {
@@ -17,6 +19,13 @@ export default function Index({mahasiswa}) {
         Inertia.get(`/mahasiswa/${id}`);
     }
     
+    const doSearchData = (e) => {
+        e.preventDefault();
+        Inertia.get('mahasiswa', {search}, {preserveState: true});
+    }
+
+    const startNumber = (mahasiswa.current_page - 1) * mahasiswa.per_page;
+
     return (
         <div>
             <h3>Data Mahasiswa</h3>
@@ -33,6 +42,10 @@ export default function Index({mahasiswa}) {
                 }}>{flash.message}</div>
             }
 
+            <form onSubmit={doSearchData}>
+                <input type='text' value={search} onChange={(e) => setSearch(e.target.value)}/>
+                <button type='submit'>Cari</button>
+            </form>
             <table cellPadding={5} border={1} style={{
                 borderCollapse: 'collapse'
             }}>
@@ -48,13 +61,13 @@ export default function Index({mahasiswa}) {
                 </thead>
                 <tbody>
                     {
-                        mahasiswa.length === 0 ? (
+                        mahasiswa.data && mahasiswa.data.length === 0 ? (
                             <tr>
-                                <th colSpan={5}>Data kosong ...</th>
+                                <th colSpan={6}>Data kosong ...</th>
                             </tr>
-                        ) : (mahasiswa.map((mhs, index) => (
+                        ) : (mahasiswa.data.map((mhs, index) => (
                             <tr key={index}>
-                                <td>{index+1}</td>
+                                <td>{startNumber + index + 1}</td>
                                 <td>{mhs.nim}</td>
                                 <td>{mhs.nama_lengkap}</td>
                                 <td>
@@ -77,6 +90,28 @@ export default function Index({mahasiswa}) {
                     }
                 </tbody>
             </table>
+            <div style={{ marginTop: 10}}>
+                {mahasiswa.links.map((link, index) => {
+
+                    let isActive = link.active;
+                    const linkActive = isActive ? {fontWeight:'bold', textDecoration:'underline'} : {};
+
+                    let linkLabel = link.label;
+
+                    if(linkLabel.includes('raquo')) {
+                        linkLabel = 'Next >>'
+                    }
+                    if(linkLabel.includes('laquo')) {
+                        linkLabel = 'Previous <<'
+                    }
+
+                    return (
+                        <button key={index} onClick={() => Inertia.get(link.url)} disabled={isActive} style={linkActive}>
+                            {linkLabel}
+                        </button>
+                    )
+                })}
+            </div>
         </div>
     )
 }
