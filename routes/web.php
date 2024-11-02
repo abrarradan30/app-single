@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MahasiswaController;
-use App\Models\Mahasiswa;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
+Route::get('/', [HomeController::class, 'index']);
 Route::get('mahasiswa/add', [MahasiswaController::class, 'formAdd']);
 Route::resource('mahasiswa', MahasiswaController::class);

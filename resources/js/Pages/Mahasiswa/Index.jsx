@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/inertia-react';
 import { usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Layout from '../../../components/Layout';
 
 export default function Index({mahasiswa, filters}) {
     // console.log(mahasiswa);
@@ -28,7 +29,8 @@ export default function Index({mahasiswa, filters}) {
     const startNumber = (mahasiswa.current_page - 1) * mahasiswa.per_page;
 
     return (
-        <div className='container container-fluid'>
+        <Layout>
+            <div>
             <h3>Data Mahasiswa</h3>
             <hr />
             <Link className='btn btn-sm btn-primary' as='button' type='button' href='/mahasiswa/add' style={{marginBottom:10}}>
@@ -44,10 +46,10 @@ export default function Index({mahasiswa, filters}) {
             }
 
             <form onSubmit={doSearchData}>
-                <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cari berdasarkan NIM/Nama" value={search} onChange={(e) => setSearch(e.target.value)}
+                <div className="input-group mb-3">
+                <input type="text" className="form-control" placeholder="Cari berdasarkan NIM/Nama" value={search} onChange={(e) => setSearch(e.target.value)}
                     aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                <button class="btn btn-outline-success" type="submit">Cari</button>
+                <button className="btn btn-outline-success" type="submit">Cari</button>
                 </div>
             </form>
             <table className='table -table-bordered table-striped table-sm'>
@@ -93,7 +95,7 @@ export default function Index({mahasiswa, filters}) {
                 </tbody>
             </table>
             <div style={{ marginTop: 5}}>
-                <ul class="pagination">
+                <ul className="pagination">
                     {mahasiswa.links.map((link, index) => {
 
                         if(link.url === null) {
@@ -135,5 +137,6 @@ export default function Index({mahasiswa, filters}) {
                 })} */}
             </div>
         </div>
+        </Layout>
     )
 }
