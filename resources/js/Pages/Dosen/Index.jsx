@@ -6,7 +6,7 @@ export default function Index() {
     return (
         <Layout>
             <div>
-                <h3>Selamat Datang di Sistem Informasi Perkuliahan</h3>
+                <h3>Ini halaman Dosen</h3>
             </div>
         </Layout>
     );

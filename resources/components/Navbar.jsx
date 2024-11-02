@@ -12,7 +12,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-md bg-primary navbar-dark">
             <div className="container container-fluid">
                 <a className="navbar-brand" href="#">
-                    Navbar
+                    SIP
                 </a>
                 <button
                     className="navbar-toggler"
@@ -34,10 +34,10 @@ const Navbar = () => {
                             <Link href='/mahasiswa' className={`nav-link ${activeMenu === 'mahasiswa' ? 'active' : ''}`}>Mahasiswa</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={`nav-link ${activeMenu === 'dosen' ? 'active' : ''}`}>Dosen</Link>
+                            <Link href='/dosen' className={`nav-link ${activeMenu === 'dosen' ? 'active' : ''}`}>Dosen</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={`nav-link ${activeMenu === 'matakuliah' ? 'active' : ''}`}>MataKuliah</Link>
+                            <Link href='/matakuliah' className={`nav-link ${activeMenu === 'matakuliah' ? 'active' : ''}`}>MataKuliah</Link>
                         </li>
                     </ul>
                 </div>
